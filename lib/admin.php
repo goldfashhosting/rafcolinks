@@ -1,10 +1,10 @@
 <?php
 /**
- * RAFCOCreator - Admin Module
+ * RAFCO Link Creator - Admin Module
  *
  * Contains admin related functions
  *
- * @package RAFCOCreator
+ * @package RAFCO Link Creator
  */
 /*  Copyright 2015 Reaktiv Studios
 
@@ -67,9 +67,9 @@ class RAFCOCreator_Admin
 		}
 
 		// load our files
-		wp_enqueue_style( 'rafco-admin', plugins_url( '/css/yourls-admin' . $css_sx, __FILE__ ), array(), RAFCO_VER, 'all' );
-		wp_enqueue_script( 'rafco-admin', plugins_url( '/js/yourls-admin' . $js_sx, __FILE__ ) , array( 'jquery' ), RAFCO_VER, true );
-		wp_localize_script( 'rafco-admin', 'yourlsAdmin', array(
+		wp_enqueue_style( 'rafco-admin', plugins_url( '/css/rafco-admin' . $css_sx, __FILE__ ), array(), YOURS_VER, 'all' );
+		wp_enqueue_script( 'rafco-admin', plugins_url( '/js/rafco-admin' . $js_sx, __FILE__ ) , array( 'jquery' ), YOURS_VER, true );
+		wp_localize_script( 'rafco-admin', 'rafcoAdmin', array(
 			'shortSubmit'   => '<a onclick="prompt(\'URL:\', jQuery(\'#shortlink\').val()); return false;" class="button button-small" href="#">' . __( 'Get Shortlink' ) . '</a>',
 			'defaultError'  => __( 'There was an error with your request.' )
 		));
@@ -87,7 +87,7 @@ class RAFCOCreator_Admin
 		global $post;
 
 		// make sure we're working with an approved post type
-		if ( ! in_array( $post->post_type, RAFCOCreator_Helper::get_yourls_types() ) ) {
+		if ( ! in_array( $post->post_type, RAFCOCreator_Helper::get_rafco_types() ) ) {
 			return;
 		}
 
@@ -102,7 +102,7 @@ class RAFCOCreator_Admin
 		}
 
 		// now add the meta box
-		add_meta_box( 'rafco-post-display', __( 'RAFCO Shortlink', 'wpyourls' ), array( __class__, 'rafco_post_display' ), $post->post_type, 'side', 'high' );
+		add_meta_box( 'rafco-post-display', __( 'RAFCO Shortlink', 'rafcolinks' ), array( __class__, 'rafco_post_display' ), $post->post_type, 'side', 'high' );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class RAFCOCreator_Admin
 	 * @param  [type] $post [description]
 	 * @return [type]       [description]
 	 */
-	public static function yourls_post_display( $post ) {
+	public static function rafco_post_display( $post ) {
 
 		// cast our post ID
 		$post_id    = absint( $post->ID );
@@ -174,7 +174,7 @@ class RAFCOCreator_Admin
 	}
 
 	/**
-	 * Create Rafco link on publish if one doesn't exist
+	 * Create rafco link on publish if one doesn't exist
 	 *
 	 * @param  integer $post_id [description]
 	 *
@@ -246,7 +246,7 @@ class RAFCOCreator_Admin
 			update_post_meta( $post_id, '_rafco_clicks', '0' );
 
 			// do the action after saving
-			do_action( 'yourls_after_url_save', $post_id, $shorturl );
+			do_action( 'rafco_after_url_save', $post_id, $shorturl );
 		}
 	}
 
@@ -264,7 +264,7 @@ class RAFCOCreator_Admin
 
 		case 'rafco-click':
 
-			echo '<span>' . RAFCOCreator_Helper::get_yourls_meta( $post_id, '_rafco_clicks', '0' ) . '</span>';
+			echo '<span>' . RAFCOCreator_Helper::get_rafco_meta( $post_id, '_rafco_clicks', '0' ) . '</span>';
 
 			break;
 
@@ -287,7 +287,7 @@ class RAFCOCreator_Admin
 		}
 
 		// get display for column icon
-		$columns['rafco-click'] = '<span title="' . __( 'RAFCO Clicks', 'wpyourls' ) . '" class="dashicons dashicons-editor-unlink"></span>';
+		$columns['rafco-click'] = '<span title="' . __( 'RAFCO Clicks', 'rafcolinks' ) . '" class="dashicons dashicons-editor-unlink"></span>';
 
 		// return the columns
 		return $columns;
